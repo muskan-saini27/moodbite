@@ -23,3 +23,6 @@ def saved_foods(request):
         request,
         "saved.html",
     )
+
+def about(request):
+    return render(request, "about.html")
