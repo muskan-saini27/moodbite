@@ -12,8 +12,13 @@ venv312/
 
 # Django
 db.sqlite3
+*.sqlite3
 media/
 staticfiles/
+
+# Local backups
+moodbite_backup_before_fix.sqlite3
+moodbite_foods_backup.json
 
 # IDE
 .vscode/
