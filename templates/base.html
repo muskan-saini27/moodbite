@@ -45,9 +45,23 @@
         </a>
 
 
+        <!-- MOBILE MENU BUTTON -->
+        <button
+            type="button"
+            class="mobile-nav-toggle"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="mobileNavigation"
+            onclick="toggleMobileNavigation(this)"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
         <!-- MAIN NAVIGATION -->
 
-        <nav class="nav-links">
+        <nav class="nav-links" id="mobileNavigation">
 
             <a href="/">
                 Discover
@@ -144,6 +158,29 @@
     ======================================================= -->
 
     <script src="{% static 'js/app.js' %}"></script>
+
+
+    <script>
+        function toggleMobileNavigation(button) {
+            const navbar = button.closest('.navbar');
+            const isOpen = navbar.classList.toggle('mobile-menu-open');
+            button.setAttribute('aria-expanded', String(isOpen));
+            button.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+        }
+
+        document.addEventListener('click', function (event) {
+            const navbar = document.querySelector('.navbar');
+            if (!navbar || !navbar.classList.contains('mobile-menu-open')) return;
+            if (!navbar.contains(event.target)) {
+                navbar.classList.remove('mobile-menu-open');
+                const button = navbar.querySelector('.mobile-nav-toggle');
+                if (button) {
+                    button.setAttribute('aria-expanded', 'false');
+                    button.setAttribute('aria-label', 'Open navigation menu');
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>
