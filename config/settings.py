@@ -165,14 +165,18 @@ DEFAULT_FROM_EMAIL = "noreply@moodbite.local"
 
 
 
-# Security defaults for local development.
-# Enable these only when HTTPS is correctly configured in production.
+
+SECURE_SSL_REDIRECT = not DEBUG
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 
-# Enable HSTS only after HTTPS is working throughout the deployed site.
-SECURE_HSTS_SECONDS = 0 if DEBUG else 31536000
-SECURE_SSL_REDIRECT = False
+# Enable HSTS after confirming the deployed HTTPS site works.
+SECURE_HSTS_SECONDS = 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
+
 
 
 if not DEBUG:
