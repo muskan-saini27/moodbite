@@ -2474,117 +2474,53 @@ def diversify_results(
     limit: int,
 ) -> list[dict]:
     """
-    Reduce duplicate food names while preserving
-    recommendation quality.
-
-    Results are already sorted by recommendation score,
-    so the first occurrence of a food name is always
-    the strongest version of that recommendation.
-
-    Example:
-
-        Paneer Curry       94%
-        Paneer Curry       91%
-        Dal Tadka          90%
-        Chole              89%
-
-    becomes:
-
-        Paneer Curry       94%
-        Dal Tadka          90%
-        Chole              89%
+    Return the highest-scoring results without repeating
+    the same food ID or normalized food name.
     """
 
-    if not results:
+    if not results or limit <= 0:
         return []
 
     selected = []
-
     seen_names = set()
-
-    remaining_duplicates = []
+    seen_ids = set()
 
     for item in results:
-
-        food = item.get(
-            "food"
-        )
+        food = item.get("food")
 
         if food is None:
             continue
 
+        food_id = str(
+            get_field(food, "food_id", "") or ""
+        ).strip().lower()
+
         name = _normalize_food_name_for_diversity(
-            get_field(
-                food,
-                "food_name",
-                "",
-            )
+            get_field(food, "food_name", "")
         )
 
-        # ----------------------------------------------------
-        # FALLBACK TO FOOD ID
-        # ----------------------------------------------------
-
-        if not name:
-
-            name = str(
-                get_field(
-                    food,
-                    "food_id",
-                    "",
-                )
-            ).strip().lower()
-
-        # ----------------------------------------------------
-        # DUPLICATE
-        # ----------------------------------------------------
-
-        if name in seen_names:
-
-            remaining_duplicates.append(
-                item
-            )
-
+        # Skip records with a repeated ID.
+        if food_id and food_id in seen_ids:
             continue
 
-        # ----------------------------------------------------
-        # NEW FOOD
-        # ----------------------------------------------------
+        # Skip records with a repeated normalized name.
+        if name and name in seen_names:
+            continue
 
-        seen_names.add(
-            name
-        )
+        if food_id:
+            seen_ids.add(food_id)
 
-        selected.append(
-            item
-        )
+        if name:
+            seen_names.add(name)
 
-        # ----------------------------------------------------
-        # ENOUGH UNIQUE RESULTS
-        # ----------------------------------------------------
+        selected.append(item)
 
         if len(selected) >= limit:
+            break
 
-            return selected[:limit]
+    return selected
 
-    # --------------------------------------------------------
-    # FALLBACK
-    #
-    # If there aren't enough unique names, fill the remaining
-    # slots with the highest-scoring duplicates.
-    # --------------------------------------------------------
-
-    if len(selected) < limit:
-
-        selected.extend(
-            remaining_duplicates[
-                : limit - len(selected)
-            ]
-        )
-
-    return selected[:limit]
-
-
+   
 # ============================================================
 # MAIN RECOMMENDATION ENGINE
 # ============================================================

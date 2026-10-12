@@ -10,7 +10,7 @@ from .views import (
 
 urlpatterns = [
     path("", home, name="home"),
-    path("food/<int:food_id>/", food_detail, name="food_detail"),
+    path("food/<str:food_id>/", food_detail, name="food_detail"),
     path("saved/", saved_foods, name="saved_foods"),
     path("about/", about, name="about"),
 ]
