@@ -1,0 +1,512 @@
+{% extends "base.html" %}
+
+{% block title %}
+    MoodBite — Profile
+{% endblock %}
+
+
+{% block content %}
+
+<section class="profile-page">
+
+    <div class="profile-container">
+
+        <!-- ==================================================
+             PROFILE HEADER
+        =================================================== -->
+
+        <div class="profile-header">
+
+            <div class="profile-avatar">
+                👤
+            </div>
+
+            <div class="profile-heading">
+
+                <span class="profile-eyebrow">
+                    YOUR ACCOUNT
+                </span>
+
+                <h1>
+                    {{ profile_user.username }}
+                </h1>
+
+                <p>
+                    Your personal MoodBite account
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             ACCOUNT INFORMATION
+        =================================================== -->
+
+        <div class="profile-grid">
+
+            <div class="profile-card">
+
+                <span class="profile-card-label">
+                    USERNAME
+                </span>
+
+                <strong>
+                    {{ profile_user.username }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-card">
+
+                <span class="profile-card-label">
+                    EMAIL
+                </span>
+
+                <strong>
+                    {% if profile_user.email %}
+                        {{ profile_user.email }}
+                    {% else %}
+                        No email added
+                    {% endif %}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-card">
+
+                <span class="profile-card-label">
+                    SAVED FOODS
+                </span>
+
+                <strong class="profile-stat">
+                    {{ saved_food_count }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-card">
+
+                <span class="profile-card-label">
+                    RECOMMENDATION HISTORY
+                </span>
+
+                <strong class="profile-stat">
+                    {{ recommendation_history_count }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             FOOD PREFERENCE SUMMARY
+        =================================================== -->
+
+        <div class="profile-preferences">
+
+            <div class="profile-section-heading">
+
+                <div>
+
+                    <span class="profile-eyebrow">
+                        YOUR TASTE
+                    </span>
+
+                    <h2>
+                        Food preferences.
+                    </h2>
+
+                    <p>
+                        These preferences help MoodBite understand
+                        what you like.
+                    </p>
+
+                </div>
+
+                <a
+                    href="{% url 'preferences' %}"
+                    class="preferences-edit-button"
+                >
+                    Edit Preferences →
+                </a>
+
+            </div>
+
+
+            <div
+                id="profilePreferencesGrid"
+                class="profile-preferences-grid"
+            >
+
+                <div class="profile-preference-card">
+
+                    <span class="profile-card-label">
+                        FOOD TYPE
+                    </span>
+
+                    <strong
+                        id="profilePreferredFoodType"
+                    >
+                        Loading...
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-preference-card">
+
+                    <span class="profile-card-label">
+                        DIET
+                    </span>
+
+                    <strong
+                        id="profilePreferredDiet"
+                    >
+                        Loading...
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-preference-card">
+
+                    <span class="profile-card-label">
+                        CUISINE
+                    </span>
+
+                    <strong
+                        id="profilePreferredCuisine"
+                    >
+                        Loading...
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-preference-card">
+
+                    <span class="profile-card-label">
+                        BUDGET
+                    </span>
+
+                    <strong
+                        id="profilePreferredBudget"
+                    >
+                        Loading...
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             PROFILE ACTIONS
+        =================================================== -->
+
+        <div class="profile-actions">
+
+            <!-- SAVED FOODS -->
+
+            <a
+                href="/saved/"
+                class="profile-action primary"
+            >
+                ❤️ View Saved Foods
+            </a>
+
+
+            <!-- RECOMMENDATION HISTORY -->
+
+            <a
+                href="{% url 'history' %}"
+                class="profile-action primary"
+            >
+                🕘 Recommendation History
+            </a>
+
+
+            <!-- FOOD PREFERENCES -->
+
+            <a
+                href="{% url 'preferences' %}"
+                class="profile-action primary"
+            >
+                ⚙️ Food Preferences
+            </a>
+
+
+            <!-- LOGOUT -->
+
+            <form
+                method="post"
+                action="{% url 'logout' %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="profile-action logout"
+                >
+                    Logout
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ==================================================
+             ACCOUNT NOTE
+        =================================================== -->
+
+        <div class="profile-note">
+
+            <span class="profile-note-icon">
+                🍽️
+            </span>
+
+            <div>
+
+                <strong>
+                    Your MoodBite account
+                </strong>
+
+                <p>
+                    Your saved foods, recommendation history,
+                    and food preferences belong only to your
+                    account. Other users cannot see your
+                    personal data.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================================
+     LOAD PROFILE PREFERENCES
+=========================================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        loadProfilePreferences();
+
+    }
+);
+
+
+async function loadProfilePreferences() {
+
+    const foodTypeElement =
+        document.getElementById(
+            "profilePreferredFoodType"
+        );
+
+    const dietElement =
+        document.getElementById(
+            "profilePreferredDiet"
+        );
+
+    const cuisineElement =
+        document.getElementById(
+            "profilePreferredCuisine"
+        );
+
+    const budgetElement =
+        document.getElementById(
+            "profilePreferredBudget"
+        );
+
+
+    try {
+
+        const response = await fetch(
+            "/accounts/api/preferences/",
+            {
+                method: "GET",
+                credentials: "same-origin",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            }
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load preferences."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !data.success ||
+            !data.preferences
+        ) {
+
+            throw new Error(
+                "Invalid preference response."
+            );
+
+        }
+
+
+        const preferences =
+            data.preferences;
+
+
+        foodTypeElement.textContent =
+            formatPreferenceValue(
+                preferences.preferred_food_type,
+                "Not set"
+            );
+
+
+        dietElement.textContent =
+            formatPreferenceValue(
+                preferences.preferred_diet_type,
+                "Not set"
+            );
+
+
+        cuisineElement.textContent =
+            formatPreferenceValue(
+                preferences.preferred_cuisine,
+                "Not set"
+            );
+
+
+        if (
+            preferences.preferred_budget !== null &&
+            preferences.preferred_budget !== undefined &&
+            preferences.preferred_budget !== ""
+        ) {
+
+            budgetElement.textContent =
+                "₹" +
+                formatBudget(
+                    preferences.preferred_budget
+                );
+
+        } else {
+
+            budgetElement.textContent =
+                "Not set";
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "MoodBite preferences error:",
+            error
+        );
+
+
+        foodTypeElement.textContent =
+            "Not available";
+
+        dietElement.textContent =
+            "Not available";
+
+        cuisineElement.textContent =
+            "Not available";
+
+        budgetElement.textContent =
+            "Not available";
+
+    }
+
+}
+
+
+function formatPreferenceValue(
+    value,
+    fallback
+) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        String(value).trim() === ""
+    ) {
+
+        return fallback;
+
+    }
+
+
+    return String(value)
+        .trim()
+        .replace(
+            /\b\w/g,
+            function (character) {
+                return character.toUpperCase();
+            }
+        );
+
+}
+
+
+function formatBudget(value) {
+
+    const number =
+        Number(value);
+
+
+    if (
+        Number.isNaN(number)
+    ) {
+
+        return value;
+
+    }
+
+
+    if (
+        Number.isInteger(number)
+    ) {
+
+        return number.toLocaleString(
+            "en-IN"
+        );
+
+    }
+
+
+    return number.toLocaleString(
+        "en-IN",
+        {
+            maximumFractionDigits: 2
+        }
+    );
+
+}
+
+</script>
+
+{% endblock %}

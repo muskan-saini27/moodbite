@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}
+MoodBite — Preferences
+{% endblock %}
+
+{% block content %}
+
+<section class="preferences-page">
+
+    <div class="preferences-container">
+
+        <div class="preferences-header">
+
+            <div class="eyebrow">
+                YOUR TASTE
+            </div>
+
+            <h1>
+                Food <span>preferences.</span>
+            </h1>
+
+            <p>
+                Tell MoodBite what you usually enjoy.
+                We'll use this to personalize your recommendations.
+            </p>
+
+        </div>
+
+        <div class="preferences-card">
+
+            <form id="preferencesForm">
+
+                {% csrf_token %}
+
+                <!-- FOOD TYPE -->
+
+                <div class="preference-field">
+
+                    <label>
+                        FOOD TYPE
+                    </label>
+
+                    <select
+                        id="preferredFoodType"
+                        name="preferred_food_type"
+                    >
+                        <option value="">
+                            No preference
+                        </option>
+
+                        <option value="Indian">
+                            Indian
+                        </option>
+
+                        <option value="International">
+                            International
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DIET -->
+
+                <div class="preference-field">
+
+                    <label>
+                        DIET
+                    </label>
+
+                    <select
+                        id="preferredDietType"
+                        name="preferred_diet_type"
+                    >
+                        <option value="">
+                            No preference
+                        </option>
+
+                        <option value="Vegetarian">
+                            Vegetarian
+                        </option>
+
+                        <option value="Vegan">
+                            Vegan
+                        </option>
+
+                        <option value="Non-Vegetarian">
+                            Non-Vegetarian
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- CUISINE -->
+
+                <div class="preference-field">
+
+                    <label>
+                        FAVOURITE CUISINE
+                    </label>
+
+                    <input
+                        type="text"
+                        id="preferredCuisine"
+                        name="preferred_cuisine"
+                        placeholder="e.g. Punjabi, Italian, Korean"
+                    >
+
+                </div>
+
+
+                <!-- BUDGET -->
+
+                <div class="preference-field">
+
+                    <label>
+                        DEFAULT BUDGET
+                    </label>
+
+                    <div class="budget-input">
+
+                        <span>
+                            ₹
+                        </span>
+
+                        <input
+                            type="number"
+                            id="preferredBudget"
+                            name="preferred_budget"
+                            min="0"
+                            step="1"
+                            placeholder="e.g. 200"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="preferences-save-button"
+                    id="savePreferencesButton"
+                >
+                    Save Preferences →
+                </button>
+
+                <div
+                    id="preferencesMessage"
+                    class="preferences-message"
+                ></div>
+
+            </form>
+
+        </div>
+
+        <a
+            href="{% url 'profile' %}"
+            class="preferences-back"
+        >
+            ← Back to Profile
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

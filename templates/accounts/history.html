@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+MoodBite — Recommendation History
+{% endblock %}
+
+
+{% block content %}
+
+<section class="history-page">
+
+    <!-- ==================================================
+         HEADER
+    =================================================== -->
+
+    <div class="history-header">
+
+        <div>
+
+            <div class="eyebrow">
+                YOUR JOURNEY
+            </div>
+
+            <h1>
+                Recommendation <span>history.</span>
+            </h1>
+
+            <p>
+                Revisit the food recommendations you've explored
+                with MoodBite.
+            </p>
+
+        </div>
+
+
+        <div class="history-actions">
+
+            <a
+                href="/"
+                class="start-over-button"
+            >
+                Discover Food →
+            </a>
+
+            <button
+                type="button"
+                id="clearHistoryButton"
+                class="clear-history-button"
+            >
+                Clear History
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         HISTORY CONTENT
+    =================================================== -->
+
+    <div
+        id="historyContainer"
+        class="history-container"
+    >
+
+        <div class="loading">
+            Loading your recommendation history...
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

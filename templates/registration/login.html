@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}
+MoodBite — Login
+{% endblock %}
+
+
+{% block content %}
+
+<section class="auth-page">
+
+    <div class="auth-card">
+
+        <div class="auth-label">
+            WELCOME BACK
+        </div>
+
+        <h1>
+            Login to <span>MoodBite.</span>
+        </h1>
+
+        <p class="auth-subtitle">
+            Your food recommendations are waiting for you.
+        </p>
+
+
+        {% if form.non_field_errors %}
+
+            <div class="auth-error">
+                {{ form.non_field_errors }}
+            </div>
+
+        {% endif %}
+
+
+        <form
+            method="post"
+            class="auth-form"
+        >
+
+            {% csrf_token %}
+
+
+            <div class="form-group">
+
+                <label for="{{ form.username.id_for_label }}">
+                    Username
+                </label>
+
+                {{ form.username }}
+
+                {% for error in form.username.errors %}
+
+                    <div class="field-error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="{{ form.password.id_for_label }}">
+                    Password
+                </label>
+
+                {{ form.password }}
+
+                {% for error in form.password.errors %}
+
+                    <div class="field-error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="auth-submit"
+            >
+                Login
+                <span>→</span>
+            </button>
+
+        </form>
+
+
+        <div class="auth-switch">
+
+            Don't have an account?
+
+            <a href="{% url 'register' %}">
+                Create one
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

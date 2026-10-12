@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+MoodBite — Food Details
+{% endblock %}
+
+
+{% block content %}
+
+<section class="detail-page">
+
+    <a
+        href="/"
+        class="back-link"
+    >
+        ← Back to Discover
+    </a>
+
+
+    <div
+        id="foodDetail"
+        class="food-detail"
+    >
+
+        <div class="detail-loading">
+            Loading food...
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            MoodBite
+        {% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+</head>
+
+<body>
+
+    <!-- ======================================================
+         NAVBAR
+    ======================================================= -->
+
+    <header class="navbar">
+
+        <!-- BRAND -->
+
+        <a
+            href="/"
+            class="brand"
+        >
+            <span class="brand-icon">
+                🍽️
+            </span>
+
+            <span>
+                Mood<span>Bite</span>
+            </span>
+        </a>
+
+
+        <!-- MAIN NAVIGATION -->
+
+        <nav class="nav-links">
+
+            <a href="/">
+                Discover
+            </a>
+
+            <a href="/saved/">
+                Saved
+            </a>
+
+            <a href="#">
+                About
+            </a>
+
+        </nav>
+
+
+        <!-- USER AREA -->
+
+        <div class="nav-user">
+
+            {% if user.is_authenticated %}
+
+                <!-- PROFILE -->
+
+            <a
+                    href="{% url 'profile' %}"
+                    class="nav-username"
+                >
+                    👤 {{ user.username }}
+            </a>
+
+
+                <!-- LOGOUT -->
+
+                <form
+                    method="post"
+                    action="{% url 'logout' %}"
+                    class="logout-form"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="nav-logout"
+                    >
+                        Logout
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <!-- LOGIN -->
+
+                <a
+                    href="{% url 'login' %}"
+                    class="nav-login"
+                >
+                    Login
+                </a>
+
+
+                <!-- REGISTER -->
+
+                <a
+                    href="{% url 'register' %}"
+                    class="nav-register"
+                >
+                    Register
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </header>
+
+
+    <!-- ======================================================
+         PAGE CONTENT
+    ======================================================= -->
+
+    <main>
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    <!-- ======================================================
+         JAVASCRIPT
+    ======================================================= -->
+
+    <script src="{% static 'js/app.js' %}"></script>
+
+</body>
+</html>

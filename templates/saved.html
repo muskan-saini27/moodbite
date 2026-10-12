@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}
+MoodBite — Saved Foods
+{% endblock %}
+
+
+{% block content %}
+
+<section class="saved-page">
+
+    <!-- ======================================================
+         SAVED FOODS HEADER
+    ======================================================= -->
+
+    <div class="saved-header">
+
+        <div>
+
+            <div class="eyebrow">
+                YOUR COLLECTION
+            </div>
+
+            <h1>
+                Saved <span>foods.</span>
+            </h1>
+
+            <p>
+                Your favourite meals, all in one place.
+            </p>
+
+        </div>
+
+
+        <a
+            href="/"
+            class="start-over-button"
+        >
+            Discover Food →
+        </a>
+
+    </div>
+
+
+    <!-- ======================================================
+         SAVED FOODS GRID
+         
+         IMPORTANT:
+         app.js loads the current authenticated user's
+         saved foods into this container.
+    ======================================================= -->
+
+    <div
+        id="savedFoodsGrid"
+        class="results-grid saved-grid"
+    >
+
+        <div class="loading">
+            Loading your saved foods...
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

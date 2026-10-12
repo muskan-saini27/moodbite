@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}
+MoodBite — Eat What Matches Your Mood
+{% endblock %}
+
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="eyebrow">
+            YOUR MOOD. YOUR FOOD.
+        </div>
+
+        <h1>
+            What are you
+            <span>craving today?</span>
+        </h1>
+
+        <p class="hero-description">
+            Tell MoodBite how you're feeling, how hungry you are,
+            and what you want to spend. We'll find food that fits.
+        </p>
+
+    </div>
+
+
+    <div class="recommendation-panel">
+
+        <!-- MOOD -->
+
+        <div class="question-section">
+
+            <div class="question-number">
+                01
+            </div>
+
+            <div class="question-content">
+
+                <h2>How are you feeling?</h2>
+
+                <p>Select the mood that fits you right now.</p>
+
+                <div class="option-grid">
+
+                    <button
+                        class="option-button"
+                        data-group="mood"
+                        data-value="happy"
+                    >
+                        <span class="option-icon">😊</span>
+                        <span>Happy</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="mood"
+                        data-value="sad"
+                    >
+                        <span class="option-icon">😔</span>
+                        <span>Sad</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="mood"
+                        data-value="stressed"
+                    >
+                        <span class="option-icon">😫</span>
+                        <span>Stressed</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="mood"
+                        data-value="tired"
+                    >
+                        <span class="option-icon">😴</span>
+                        <span>Tired</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="mood"
+                        data-value="energetic"
+                    >
+                        <span class="option-icon">⚡</span>
+                        <span>Energetic</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="mood"
+                        data-value="excited"
+                    >
+                        <span class="option-icon">🤩</span>
+                        <span>Excited</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="mood"
+                        data-value="calm"
+                    >
+                        <span class="option-icon">😌</span>
+                        <span>Calm</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="mood"
+                        data-value="bored"
+                    >
+                        <span class="option-icon">🥱</span>
+                        <span>Bored</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HUNGER -->
+
+        <div class="question-section">
+
+            <div class="question-number">
+                02
+            </div>
+
+            <div class="question-content">
+
+                <h2>How hungry are you?</h2>
+
+                <p>We'll adjust recommendations to your hunger level.</p>
+
+                <div class="option-grid compact">
+
+                    <button
+                        class="option-button"
+                        data-group="hunger"
+                        data-value="low"
+                    >
+                        <span class="option-icon">🍓</span>
+                        <span>Just a little</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="hunger"
+                        data-value="moderate"
+                    >
+                        <span class="option-icon">🥪</span>
+                        <span>Moderately hungry</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="hunger"
+                        data-value="hungry"
+                    >
+                        <span class="option-icon">🍛</span>
+                        <span>Hungry</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="hunger"
+                        data-value="very hungry"
+                    >
+                        <span class="option-icon">🍽️</span>
+                        <span>Very hungry</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BUDGET -->
+
+        <div class="question-section">
+
+            <div class="question-number">
+                03
+            </div>
+
+            <div class="question-content">
+
+                <h2>What's your budget?</h2>
+
+                <p>Set the maximum amount you want to spend.</p>
+
+                <div class="budget-control">
+
+                    <span class="currency">₹</span>
+
+                    <input
+                        id="budgetInput"
+                        type="number"
+                        min="20"
+                        max="5000"
+                        value="200"
+                        placeholder="200"
+                    >
+
+                    <span class="budget-label">
+                        maximum
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DIET -->
+
+        <div class="question-section">
+
+            <div class="question-number">
+                04
+            </div>
+
+            <div class="question-content">
+
+                <h2>What's your preference?</h2>
+
+                <p>Choose your dietary preference.</p>
+
+                <div class="option-grid compact">
+
+                    <button
+                        class="option-button"
+                        data-group="diet"
+                        data-value="vegetarian"
+                    >
+                        <span class="option-icon">🥬</span>
+                        <span>Vegetarian</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="diet"
+                        data-value="vegan"
+                    >
+                        <span class="option-icon">🌱</span>
+                        <span>Vegan</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="diet"
+                        data-value="non-vegetarian"
+                    >
+                        <span class="option-icon">🍗</span>
+                        <span>Non-Vegetarian</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOD TYPE -->
+
+        <div class="question-section">
+
+            <div class="question-number">
+                05
+            </div>
+
+            <div class="question-content">
+
+                <h2>What kind of food?</h2>
+
+                <p>Choose between Indian and international food.</p>
+
+                <div class="option-grid compact">
+
+                    <button
+                        class="option-button"
+                        data-group="food_type"
+                        data-value="Indian"
+                    >
+                        <span class="option-icon">🇮🇳</span>
+                        <span>Indian</span>
+                    </button>
+
+                    <button
+                        class="option-button"
+                        data-group="food_type"
+                        data-value="International"
+                    >
+                        <span class="option-icon">🌎</span>
+                        <span>International</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTION -->
+
+        <div class="action-section">
+
+            <button
+                id="findFoodButton"
+                class="find-food-button"
+            >
+                <span>Find My Food</span>
+                <span class="arrow">→</span>
+            </button>
+
+            <p
+                id="formMessage"
+                class="form-message"
+            ></p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- RESULTS -->
+
+<section
+    id="resultsSection"
+    class="results-section hidden"
+>
+
+    <div class="results-header">
+
+        <div>
+            <div class="eyebrow">
+                YOUR MATCHES
+            </div>
+
+            <h2>
+                We found something
+                <span>for you.</span>
+            </h2>
+        </div>
+
+        <button
+            id="startOverButton"
+            class="secondary-button"
+        >
+            Start over
+        </button>
+
+    </div>
+
+
+    <div
+        id="resultsGrid"
+        class="results-grid"
+    >
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,900 @@
+
+
+{% extends "base.html" %}
+
+
+
+{% block title %}Analytics — MoodBite{% endblock %}
+
+
+
+{% block content %}
+
+<main class="analytics-page">
+
+
+
+    <header class="analytics-header">
+
+        <div>
+
+            <p class="analytics-eyebrow">MOODBITE INSIGHTS</p>
+
+            <h1>Your food choices,<br><span>in focus.</span></h1>
+
+            <p class="analytics-subtitle">
+
+                Explore your activity, feedback and food discoveries.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="analytics-filter">
+
+            <label for="analyticsPeriod">Time period</label>
+
+            <select id="analyticsPeriod">
+
+                <option value="7d">Last 7 days</option>
+
+                <option value="30d" selected>Last 30 days</option>
+
+                <option value="90d">Last 90 days</option>
+
+                <option value="all">All time</option>
+
+            </select>
+
+        </div>
+
+    </header>
+
+
+
+    <section id="analyticsLoading" class="analytics-loading">
+
+        Loading your analytics...
+
+    </section>
+
+
+
+    <section id="analyticsDashboard" hidden>
+
+
+
+        <section class="analytics-kpis">
+
+            <article class="analytics-kpi">
+
+                <span>Total interactions</span>
+
+                <strong id="totalInteractions">0</strong>
+
+                <small>Recorded activity</small>
+
+                <small id="interactionsComparison"></small>
+
+            </article>
+
+
+
+            <article class="analytics-kpi">
+
+                <span>Recommendation sessions</span>
+
+                <strong id="recommendationsCount">0</strong>
+
+                <small>Sessions recorded</small>
+
+                <small id="recommendationsComparison"></small>
+
+            </article>
+
+
+
+            <article class="analytics-kpi">
+
+                <span>Food views</span>
+
+                <strong id="viewsCount">0</strong>
+
+                <small>Detail-page views</small>
+
+                <small id="viewsComparison"></small>
+
+            </article>
+
+
+
+            <article class="analytics-kpi">
+
+                <span>Currently saved</span>
+
+                <strong id="savesCount">0</strong>
+
+                <small>Unique saved foods</small>
+
+            </article>
+
+
+
+            <article class="analytics-kpi">
+
+                <span>Likes</span>
+
+                <strong id="likesCount">0</strong>
+
+                <small>Recorded like events</small>
+
+                <small id="likesComparison"></small>
+
+            </article>
+
+
+
+            <article class="analytics-kpi">
+
+                <span>Like share</span>
+
+                <strong id="likeRatio">—</strong>
+
+                <small>Of likes and dislikes</small>
+
+            </article>
+
+
+
+        </section>
+
+
+
+        <section class="analytics-insights-section">
+
+            <div class="analytics-section-heading">
+
+                <div>
+
+                    <p class="analytics-eyebrow">YOUR TAKEAWAYS</p>
+
+                    <h2>Insights at a glance</h2>
+
+                </div>
+
+            </div>
+
+            <div id="analyticsInsights" class="analytics-insights">
+
+                <p>Analyzing your activity...</p>
+
+            </div>
+
+        </section>
+
+
+
+        <section class="analytics-chart-grid">
+
+            <article class="analytics-chart-panel analytics-chart-wide">
+
+                <div class="analytics-panel-heading">
+
+                    <div>
+
+                        <p class="analytics-eyebrow">ACTIVITY OVER TIME</p>
+
+                        <h2>Your activity trend</h2>
+
+                    </div>
+
+                    <span class="analytics-chart-note">Daily events</span>
+
+                </div>
+
+                <div class="analytics-chart-container analytics-line-container">
+
+                    <canvas id="activityTrendChart"></canvas>
+
+                </div>
+
+            </article>
+
+
+
+            <article class="analytics-chart-panel">
+
+                <div class="analytics-panel-heading">
+
+                    <div>
+
+                        <p class="analytics-eyebrow">BEHAVIOUR</p>
+
+                        <h2>Interaction breakdown</h2>
+
+                    </div>
+
+                </div>
+
+                <div class="analytics-chart-container analytics-doughnut-container">
+
+                    <canvas id="interactionChart"></canvas>
+
+                </div>
+
+            </article>
+
+
+
+            <article class="analytics-chart-panel">
+
+                <div class="analytics-panel-heading">
+
+                    <div>
+
+                        <p class="analytics-eyebrow">COMPARE</p>
+
+                        <h2>Interaction totals</h2>
+
+                    </div>
+
+                </div>
+
+                <div class="analytics-chart-container analytics-bar-container">
+
+                    <canvas id="interactionBarChart"></canvas>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+
+        <section class="analytics-grid">
+
+            <article class="analytics-panel">
+
+                <p class="analytics-eyebrow">MOST VIEWED</p>
+
+                <h2>Foods you explored</h2>
+
+                <div id="mostViewedFoods" class="analytics-food-list"></div>
+
+            </article>
+
+
+
+            <article class="analytics-panel">
+
+                <p class="analytics-eyebrow">MOST SAVED</p>
+
+                <h2>Foods you wanted to keep</h2>
+
+                <div id="mostSavedFoods" class="analytics-food-list"></div>
+
+            </article>
+
+
+
+            <article class="analytics-panel">
+
+                <p class="analytics-eyebrow">POSITIVE FEEDBACK</p>
+
+                <h2>Foods you liked</h2>
+
+                <div id="mostLikedFoods" class="analytics-food-list"></div>
+
+            </article>
+
+
+
+            <article class="analytics-panel">
+
+                <p class="analytics-eyebrow">YOUR FEEDBACK</p>
+
+                <h2>Foods to reconsider</h2>
+
+                <div id="mostDislikedFoods" class="analytics-food-list"></div>
+
+            </article>
+
+        </section>
+
+
+
+        <p class="analytics-footnote">
+
+            Insights are calculated from your recorded MoodBite activity.
+
+            Trends include dates with recorded events; missing dates are not
+
+            interpreted as proof of zero activity.
+
+        </p>
+
+
+
+    </section>
+
+</main>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+let activityChart = null;
+
+let interactionChartInstance = null;
+
+let interactionBarChart = null;
+
+
+
+const analyticsLabels = {
+
+    view: "Views",
+
+    like: "Likes",
+
+    dislike: "Dislikes",
+
+    save: "Saves",
+
+    unsave: "Unsaves"
+
+};
+
+
+
+const chartColors = {
+
+    view: "#F36B35",
+
+    like: "#55785D",
+
+    dislike: "#D95523",
+
+    save: "#E8B45B",
+
+    unsave: "#B9B1A5"
+
+};
+
+
+
+async function loadAnalyticsDashboard() {
+
+    const loading = document.getElementById("analyticsLoading");
+
+    const dashboard = document.getElementById("analyticsDashboard");
+
+    const period = document.getElementById("analyticsPeriod").value;
+
+
+
+    loading.hidden = false;
+
+    loading.textContent = "Loading your analytics...";
+
+
+
+    try {
+
+        const response = await fetch(
+
+            `/analytics/api/?period=${encodeURIComponent(period)}`,
+
+            { credentials: "same-origin" }
+
+        );
+
+
+
+        const data = await response.json();
+
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(data.message || "Unable to load analytics.");
+
+        }
+
+
+
+        const summary = data.summary;
+
+        const previous = data.previous_summary || {};
+
+
+
+        function comparisonText(current, previousValue) {
+
+            if (previousValue == null) return "No previous-period data";
+
+
+
+            const difference = Number(current || 0) - Number(previousValue || 0);
+
+
+
+            if (difference > 0) return `↑ ${difference} more than previous period`;
+
+            if (difference < 0) return `↓ ${Math.abs(difference)} fewer than previous period`;
+
+
+
+            return "Same as previous period";
+
+        }
+
+        const counts = data.interaction_counts || {};
+
+
+
+        document.getElementById("totalInteractions").textContent =
+
+            summary.total_interactions ?? 0;
+
+
+
+        document.getElementById("recommendationsCount").textContent =
+
+            summary.recommendations ?? 0;
+
+
+
+        document.getElementById("viewsCount").textContent =
+
+            summary.views ?? 0;
+
+
+
+        document.getElementById("savesCount").textContent =
+
+            summary.current_saved_foods ?? 0;
+
+
+
+        document.getElementById("likesCount").textContent =
+
+            summary.likes ?? 0;
+
+
+
+        document.getElementById("interactionsComparison").textContent =
+            comparisonText(summary.total_interactions, previous.interactions);
+        document.getElementById("recommendationsComparison").textContent =
+            comparisonText(summary.recommendations, previous.recommendations);
+        document.getElementById("viewsComparison").textContent =
+            comparisonText(summary.views, previous.views);
+        document.getElementById("likesComparison").textContent =
+            comparisonText(summary.likes, previous.likes);
+
+        document.getElementById("likeRatio").textContent =
+
+            summary.like_ratio == null ? "—" : `${summary.like_ratio}%`;
+
+
+
+        renderInsights(data.insights || []);
+
+        renderActivityTrend(data.trend || []);
+
+        renderInteractionBreakdown(counts);
+
+        renderInteractionComparison(counts);
+
+
+
+        renderFoodList("mostViewedFoods", data.most_viewed, "total", "views");
+
+        renderFoodList("mostSavedFoods", data.most_saved, "total", "save events");
+
+        renderFoodList("mostLikedFoods", data.most_liked, "total", "likes");
+
+        renderFoodList("mostDislikedFoods", data.most_disliked, "total", "dislikes");
+
+
+
+        loading.hidden = true;
+
+        dashboard.hidden = false;
+
+    } catch (error) {
+
+        loading.hidden = false;
+
+        loading.textContent =
+
+            "Unable to load analytics. Check your connection and try again.";
+
+        console.error("Analytics error:", error);
+
+    }
+
+}
+
+
+
+function renderInsights(insights) {
+
+    const container = document.getElementById("analyticsInsights");
+
+
+
+    if (!insights.length) {
+
+        container.innerHTML = `
+
+            <article class="analytics-insight-card">
+
+                <p class="analytics-eyebrow">GET STARTED</p>
+
+                <h3>Your insights will appear here</h3>
+
+                <p>Explore foods and leave feedback to build your activity history.</p>
+
+            </article>`;
+
+        return;
+
+    }
+
+
+
+    container.innerHTML = insights.map(item => `
+
+        <article class="analytics-insight-card">
+
+            <p class="analytics-eyebrow">${escapeAnalyticsHTML(item.title || "INSIGHT")}</p>
+
+            <h3>${escapeAnalyticsHTML(item.value || "—")}</h3>
+
+            <p>${escapeAnalyticsHTML(item.detail || "")}</p>
+
+        </article>
+
+    `).join("");
+
+}
+
+
+
+function renderActivityTrend(rows) {
+
+    const canvas = document.getElementById("activityTrendChart");
+
+    if (!canvas || typeof Chart === "undefined") return;
+
+
+
+    if (activityChart) activityChart.destroy();
+
+
+
+
+
+    const datasets = [
+
+        ["views", "Views", "view"],
+
+        ["likes", "Likes", "like"],
+
+        ["dislikes", "Dislikes", "dislike"],
+
+        ["saves", "Saves", "save"],
+
+        ["unsaves", "Unsaves", "unsave"]
+
+    ].map(([key, label, colorKey]) => ({
+
+        label,
+
+        data: rows.map(row => ({
+
+            x: row.date,
+
+            y: Number(row[key]) || 0
+
+        })),
+
+        borderColor: chartColors[colorKey],
+
+        backgroundColor: "transparent",
+
+        tension: 0.3,
+
+        borderWidth: 2,
+
+        pointRadius: 2
+
+    }));
+
+
+
+    activityChart = new Chart(canvas, {
+
+        type: "line",
+
+        data: { datasets },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            interaction: { mode: "index", intersect: false },
+
+            scales: {
+
+                x: {
+
+                    type: "category",
+
+                    labels: [...new Set(rows.map(row => row.date))],
+
+                    ticks: { maxTicksLimit: 8 }
+
+                },
+
+                y: {
+
+                    beginAtZero: true,
+
+                    ticks: { precision: 0 }
+
+                }
+
+            },
+
+            plugins: {
+
+                legend: { position: "bottom" }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+
+function renderInteractionBreakdown(counts) {
+
+    const canvas = document.getElementById("interactionChart");
+
+    if (!canvas || typeof Chart === "undefined") return;
+
+
+
+    if (interactionChartInstance) interactionChartInstance.destroy();
+
+
+
+    const keys = Object.keys(analyticsLabels);
+
+
+
+    interactionChartInstance = new Chart(canvas, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: keys.map(key => analyticsLabels[key]),
+
+            datasets: [{
+
+                data: keys.map(key => Number(counts[key]) || 0),
+
+                backgroundColor: keys.map(key => chartColors[key]),
+
+                borderWidth: 0,
+
+                hoverOffset: 5
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: { position: "bottom" }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+
+function renderInteractionComparison(counts) {
+
+    const canvas = document.getElementById("interactionBarChart");
+
+    if (!canvas || typeof Chart === "undefined") return;
+
+
+
+    if (interactionBarChart) interactionBarChart.destroy();
+
+
+
+    const keys = Object.keys(analyticsLabels);
+
+
+
+    interactionBarChart = new Chart(canvas, {
+
+        type: "bar",
+
+        data: {
+
+            labels: keys.map(key => analyticsLabels[key]),
+
+            datasets: [{
+
+                label: "Events",
+
+                data: keys.map(key => Number(counts[key]) || 0),
+
+                backgroundColor: keys.map(key => chartColors[key]),
+
+                borderRadius: 7,
+
+                maxBarThickness: 42
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            indexAxis: "y",
+
+            scales: {
+
+                x: {
+
+                    beginAtZero: true,
+
+                    ticks: { precision: 0 }
+
+                },
+
+                y: {
+
+                    grid: { display: false }
+
+                }
+
+            },
+
+            plugins: {
+
+                legend: { display: false }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+
+function renderFoodList(elementId, foods, metric, metricLabel = "") {
+
+    const container = document.getElementById(elementId);
+
+    if (!container) return;
+
+
+
+    if (!foods || !foods.length) {
+
+        container.innerHTML = "<p class='analytics-empty'>No data for this period yet.</p>";
+
+        return;
+
+    }
+
+
+
+    container.innerHTML = foods.map((food, index) => {
+
+        const foodId = food.food__food_id || food.food_food_id || "";
+
+        const rawName = food.food__food_name || food.food_food_name || "Unknown food";
+
+        const foodName = escapeAnalyticsHTML(rawName);
+
+        const count = Number(food[metric]) || 0;
+
+
+
+        const nameHTML = foodId
+
+            ? `<a class="analytics-food-name analytics-food-link"
+
+                  href="/food/${encodeURIComponent(foodId)}/">${foodName}</a>`
+
+            : `<span class="analytics-food-name">${foodName}</span>`;
+
+
+
+        return `
+
+            <div class="analytics-food-row">
+
+                <span class="analytics-food-rank">${index + 1}</span>
+
+                ${nameHTML}
+
+                <strong>${count}${metricLabel ? ` ${escapeAnalyticsHTML(metricLabel)}` : ""}</strong>
+
+            </div>`;
+
+    }).join("");
+
+}
+
+
+
+function escapeAnalyticsHTML(value) {
+
+    return String(value)
+
+        .replaceAll("&", "&amp;")
+
+        .replaceAll("<", "&lt;")
+
+        .replaceAll(">", "&gt;")
+
+        .replaceAll('"', "&quot;")
+
+        .replaceAll("'", "&#039;");
+
+}
+
+
+
+document.getElementById("analyticsPeriod").addEventListener(
+
+    "change",
+
+    loadAnalyticsDashboard
+
+);
+
+
+
+document.addEventListener("DOMContentLoaded", loadAnalyticsDashboard);
+
+</script>
+
+{% endblock %}
